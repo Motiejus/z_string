@@ -5,7 +5,7 @@
 -include_lib("eunit/include/eunit.hrl").
 
 %% @doc Run a function and output to stdout. Useful for PropEr within eunit.
--spec print_stdout(fun()) -> true.
+-spec print_stdout(fun(() -> A)) -> A.
 print_stdout(Fun) ->
     EunitLeader = erlang:group_leader(),
     erlang:group_leader(whereis(user), self()),
