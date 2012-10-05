@@ -1,0 +1,12 @@
+{application, z_string,
+ [
+  {description, ""},
+  {vsn, "1"},
+  {registered, []},
+  {applications, [
+                  kernel,
+                  stdlib
+                 ]},
+  {mod, { z_string_app, []}},
+  {env, []}
+ ]}.
