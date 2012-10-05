@@ -1,5 +1,6 @@
 .*.sw[op]
 *.beam
 .eunit
+/rebar
 ebin/
 /deps/

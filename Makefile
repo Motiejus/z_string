@@ -1,18 +1,15 @@
-REBAR = ./rebar $(REBAR_ARGS)
-REBAR_URL = https://github.com/downloads/basho/rebar/rebar
+REBAR := $(shell which rebar || echo ./rebar)
+REBAR_URL := https://github.com/downloads/basho/rebar/rebar
 
-.PHONY: clean compile test
+.PHONY: compile test
 
-compile: rebar
+compile: $(REBAR)
 	$(REBAR) get-deps compile
-
-clean:
-	$(REBAR) clean
 
 test: compile
 	$(REBAR) eunit -v skip_deps=true
 
-rebar:
+./rebar:
 	erl -noshell -s inets start -s ssl start \
         -eval 'httpc:request(get, {"$(REBAR_URL)", []}, [], [{stream, "./rebar"}])' \
         -s inets stop -s init stop
