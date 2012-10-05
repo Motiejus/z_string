@@ -6,7 +6,6 @@
 sanitize_utf8(L) when is_list(L) -> sanitize_utf8(iolist_to_binary(L));
 sanitize_utf8(B) when is_binary(B) -> s_utf8(B, <<>>).
 
-%% @doc Check if given string is valid utf8 acceptable by emysql
 s_utf8(<<>>, Acc) ->
     Acc;
 
