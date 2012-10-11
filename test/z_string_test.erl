@@ -83,17 +83,32 @@ utf8_string() ->
         iolist_to_binary(CodePoints)
     ).
 
-%% @doc Valid sub-UTF-8 code point binary (1-3 byte length)
+%% @doc Generate a codepoint of max Len bytes in length
+-spec gen_codepoint(pos_integer(), [proper_types:type(), ...]) ->
+    proper_types:type().
+gen_codepoint(4, Acc) ->
+    gen_codepoint(3, [{integer(16#10000, 16#10FFFF), 4}|Acc]);
+
+gen_codepoint(3, Acc) ->
+    V1 = integer(16#800, 16#D7FF),
+    V2 = integer(16#E000, 16#FFFD),
+    gen_codepoint(2, [{union([V1, V2]), 3}|Acc]);
+
+gen_codepoint(2, Acc) ->
+    gen_codepoint(1, [{integer(16#80, 16#7FF), 2}|Acc]);
+
+gen_codepoint(1, Acc) ->
+    union([{integer(0, 16#7F), 1}|Acc]).
+
 utf8_codepoint() ->
+    utf8_codepoint(4).
+
+%% @doc Valid sub-UTF-8 code point binary (1-4 byte length)
+-spec utf8_codepoint(pos_integer()) -> proper_types:type().
+utf8_codepoint(MaxLen) ->
     ?LET(
         {Codepoint, Octets},
-        union([
-                {integer(0, 16#7F), 1},
-                {integer(16#80, 16#7FF), 2},
-                {integer(16#800, 16#D7FF), 3},
-                {integer(16#E000, 16#FFFD), 3},
-                {integer(16#10000, 16#10FFFF), 4}
-            ]),
+        gen_codepoint(MaxLen, []),
         case Octets of
             1 ->
                 <<Codepoint:8>>;
