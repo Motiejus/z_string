@@ -34,11 +34,11 @@ v_utf8(Bin) ->
 z_string_test_() ->
     [
         {"z_string:sanitize_utf8 -> unicode.erl",
-            proper_utils:qc_(s_utf8a())},
+            proper_eunit:qc_(s_utf8a(), [{constraint_tries, 1000}])},
         {"unicode.erl -> z_string:sanitize_utf8",
-            proper_utils:qc_(s_utf8b())},
+            proper_eunit:qc_(s_utf8b(), [{constraint_tries, 1000}])},
         {"For every utf8 binary unicode.erl and z_string:sanitize_utf8",
-            proper_utils:qc_(s_utf8c())}
+            proper_eunit:qc_(s_utf8c(), [{constraint_tries, 1000}])}
     ].
 
 %% @doc For every random binary if s_utf8 claims it's utf8,
